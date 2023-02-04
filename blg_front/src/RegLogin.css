@@ -1,0 +1,86 @@
+body {
+    background-color: #282c34;
+    font-family: 'Sono', sans-serif;
+}
+
+.buttonSubmit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    padding: 0.3em 0.3em;
+    border: 4px solid #282c34;
+    border-radius: 25px;
+    color: #282c34;
+    background-color: #09c5e0;
+    font-size: 1.5em;
+    font-family: 'Sono', sans-serif;
+}
+
+.buttonSubmit:hover {
+    background-color: #09c0e0;
+}
+
+.buttonSubmit:active {
+    background-color: #282c34;
+    color: #09c5e0;
+}
+
+.regform_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.regform_container form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50vw;
+    min-width: 16em;
+    height: 50vh;
+    min-height: 10em;
+    margin: 0;
+    padding: 1.4em;
+    color: #282c34;
+    font-size: 2.1em;
+    background-color: #09c5e0;
+    border-radius: 35px;
+}
+
+.regform_container label {
+    display: flex;
+    width: 100%;
+}
+
+.regform_container span {
+    flex-basis: 45%;
+    text-align: right;
+}
+
+.regform_container input {
+    flex-basis: 55%;
+    background-color: transparent;
+    font-family: 'Sono', sans-serif;
+    border: none;
+    border-bottom: 4px groove #282c34;
+    outline: none;
+    color: #282c34;
+    font-size: 1em;
+    max-width: 9em;
+}
+
+.regnotif {
+    padding: 0;
+    margin: 35px 0 0;
+}
+
+.regnotifpos {
+    color: #008838;
+}
+
+.regnotifneg {
+    color: #880020;
+}

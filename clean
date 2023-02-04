@@ -1,0 +1,4 @@
+#!/bin/env sh
+rm -rf ./blg_api/node_modules/ ./blg_api/package-lock.json
+rm -rf ./blg_front/node_modules/ ./blg_front/package-lock.json
+rm -rf ./blg_db/data/*
