@@ -88,12 +88,12 @@ app.post('/api/user/data', (req, res) => {
     const user_token = req.cookies.user_token ? JSON.parse(req.cookies.user_token) : null;
     const user_uid = parseToken(user_token);
     if (!user_uid)
-        res.json({data: "Unauthorized"}).status(401);
+        res.status(401).json({data: "Unauthorized"});
     else
         connection.query('SELECT * FROM users WHERE user_uid = ?', [user_uid], (err, result) => {
-            if (err || result.length === 0) res.json({data: "Unauthorized"}).status(401);
+            if (err || result.length === 0) res.status(401).json({data: "Unauthorized"});
             else res.json({
-                usernamename: result[0].username,
+                username: result[0].username,
                 email: result[0].email,
                 created_at: result[0].created_at
             })
