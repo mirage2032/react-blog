@@ -8,7 +8,7 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 10vh;
+    height: 5vw;
 }
 
 nav span h1{
@@ -27,7 +27,16 @@ nav span h1{
     width: 20vw;
     color: black;
     background-color: #09c5e0;
-    font-size: 2vw;
+    font-size: 2.5vw;
+    font-family: 'Sono', sans-serif;
+}
+
+.navButton-left {
+    border-bottom-right-radius: 2vw;
+}
+
+.navButton-right {
+    border-bottom-left-radius: 2vw;
 }
 
 .navButton:hover {

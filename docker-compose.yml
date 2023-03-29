@@ -7,9 +7,11 @@ services:
     volumes:
       - ./blg_front:/web
     ports:
-      - "3000:3000"
+      - "80:3000"
     working_dir: /web
     command: sh -c "npm install --only=prod --no-fund --no-audit && npm start"
+    environment:
+      - DANGEROUSLY_DISABLE_HOST_CHECK=true
     depends_on:
       - api-container
   api-container:

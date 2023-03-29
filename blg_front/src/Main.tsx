@@ -1,24 +1,33 @@
 import React, {Component} from 'react';
 import './Main.css';
+import Cookies from "js-cookie";
+
+const navbar_nologin = (
+    <nav>
+        <a className={'navButton navButton-left'} href={"/login"}>LOG IN</a>
+        <span><h1>BLOG</h1></span>
+        <a className={'navButton navButton-right'} href={"/register"}>REGISTER</a>
+    </nav>)
 
 class MainPage extends Component {
 
-    state: { logged_in: boolean; name: string; navbar: JSX.Element }
+    state: { logged_in: boolean; navbar: JSX.Element }
 
     constructor(props: any) {
         super(props);
         this.state = {
             logged_in: false,
-            name: '',
-            navbar: (
-                <nav>
-                    <a className={'navButton'} href={"/login"}>LOG IN</a>
-                    <span><h1>BLOG</h1></span>
-                    <a className={'navButton'} href={"/register"}>REGISTER</a>
-                </nav>)
+            navbar: navbar_nologin
         };
     }
 
+    logOut() {
+        Cookies.remove("user_token");
+        this.setState({
+            logged_in: false,
+            navbar: navbar_nologin
+        })
+    }
     componentDidMount() {
         fetch('/api/user/data', {
             method: 'POST',
@@ -33,12 +42,11 @@ class MainPage extends Component {
             .then(data => {
                 this.setState({
                     logged_in: true,
-                    name: data.username,
                     navbar: (
                         <nav>
-                            <a className={'navButton'} href={"/logout"}>LOG OUT</a>
+                            <button className={'navButton navButton-left'} onClick={this.logOut.bind(this)}>LOG OUT</button>
                             <span><h1>BLOG</h1></span>
-                            <a className={'navButton'} href={"/account"}>{data.username}</a>
+                            <a className={'navButton navButton-right'} href={"/account"}>{data.username}</a>
                         </nav>
                     )
                 })
@@ -55,9 +63,6 @@ class MainPage extends Component {
         )
     }
 
-    rotatelogo() {
-
-    }
 }
 
 export default MainPage;

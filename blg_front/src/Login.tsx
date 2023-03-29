@@ -38,7 +38,8 @@ class Login extends Component {
                 if (data.error) this.setState({attempt_made: true, attempt_success: false})
                 else {
                     this.setState({attempt_made: true, attempt_success: true})
-                    Cookies.set("user_token", JSON.stringify(data.user_token), {expires: 3});
+                    Cookies.set("user_token", JSON.stringify(data.user_token), {expires: 3*24});
+                    window.location.href = '/posts';
                 }
             })
 
