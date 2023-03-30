@@ -8,6 +8,7 @@ services:
       - ./blg_front:/web
     ports:
       - "80:3000"
+      - "3000:3000"
     working_dir: /web
     command: sh -c "npm install --only=prod --no-fund --no-audit && npm start"
     environment:

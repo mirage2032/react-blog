@@ -1,0 +1,21 @@
+.articles {
+    display: grid;
+    width: 70vw;
+    margin: auto;
+}
+
+.article {
+    border-radius: 2em;
+    background-color: #457f89;
+    margin: 1em 0;
+    padding: 1em;
+}
+
+.article::before{
+    position: absolute;
+    box-shadow: 0 0 8px 8px #282c34 inset;
+}
+
+.article_username {
+    float: right;
+}

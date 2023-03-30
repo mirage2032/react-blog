@@ -100,7 +100,19 @@ app.post('/api/user/data', (req, res) => {
         })
 })
 
-// app.post('/api/post', (req, res) => {
-//     const user_token = req.cookies.user_token ? JSON.parse(req.cookies.user_token) : null;
-//     const parsed_token = parseToken(user_token);
-// })
+app.post('/api/posts', (req, res) => {
+    const user_token = req.cookies.user_token ? JSON.parse(req.cookies.user_token) : null;
+    const user_uid = parseToken(user_token);
+    const category = req.body.category
+    if (!user_uid)
+        res.status(401).json({data: "Unauthorized"});
+    else
+        connection.query('SELECT posts.created_at, posts.content, users.username\n' +
+            'FROM posts\n' +
+            'JOIN users\n' +
+            'ON posts.user_uid = users.user_uid\n' +
+            'WHERE posts.category = ?\n' +
+            'ORDER BY posts.created_at DESC;',[category],(err,result) =>{
+            res.json(result)
+        })
+})

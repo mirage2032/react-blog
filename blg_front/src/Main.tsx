@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 const navbar_nologin = (
     <nav>
         <a className={'navButton navButton-left'} href={"/login"}>LOG IN</a>
-        <span><h1>BLOG</h1></span>
+        <span><h1>The Deal</h1></span>
         <a className={'navButton navButton-right'} href={"/register"}>REGISTER</a>
     </nav>)
 
@@ -45,7 +45,7 @@ class MainPage extends Component {
                     navbar: (
                         <nav>
                             <button className={'navButton navButton-left'} onClick={this.logOut.bind(this)}>LOG OUT</button>
-                            <span><h1>BLOG</h1></span>
+                            <span><h1>The Deal</h1></span>
                             <a className={'navButton navButton-right'} href={"/account"}>{data.username}</a>
                         </nav>
                     )
@@ -54,13 +54,7 @@ class MainPage extends Component {
     }
 
     render() {
-        return (
-            <div>
-                {this.state.navbar}
-                <main>
-                </main>
-            </div>
-        )
+        return this.state.navbar
     }
 
 }

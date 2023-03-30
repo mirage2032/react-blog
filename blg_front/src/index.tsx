@@ -7,6 +7,7 @@ import App from "./App";
 import MainPage from "./Main";
 import Register from "./Register";
 import Login from "./Login";
+import Posts from "./Posts"
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -20,6 +21,7 @@ root.render(
                 <Route path={"/App"} element={<App/>}/>
                 <Route path={"/register"} element={<Register/>}/>
                 <Route path={"/login"} element={<Login/>}/>
+                <Route path={"/posts"} element={<Posts/>}></Route>
             </Routes>
         </BrowserRouter>
     </React.StrictMode>
