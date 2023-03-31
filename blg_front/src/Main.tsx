@@ -2,10 +2,14 @@ import React, {Component} from 'react';
 import './Main.css';
 import Cookies from "js-cookie";
 
+const navbar_title = (
+    <h1>The Deal</h1>
+)
+
 const navbar_nologin = (
     <nav>
         <a className={'navButton navButton-left'} href={"/login"}>LOG IN</a>
-        <span><h1>The Deal</h1></span>
+        {navbar_title}
         <a className={'navButton navButton-right'} href={"/register"}>REGISTER</a>
     </nav>)
 
@@ -45,7 +49,7 @@ class MainPage extends Component {
                     navbar: (
                         <nav>
                             <button className={'navButton navButton-left'} onClick={this.logOut.bind(this)}>LOG OUT</button>
-                            <span><h1>The Deal</h1></span>
+                            {navbar_title}
                             <a className={'navButton navButton-right'} href={"/account"}>{data.username}</a>
                         </nav>
                     )
