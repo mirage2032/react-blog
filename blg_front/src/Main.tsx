@@ -13,7 +13,7 @@ const navbar_nologin = (
         <a className={'navButton navButton-right'} href={"/register"}>REGISTER</a>
     </nav>)
 
-class MainPage extends Component {
+class MainPage extends Component<any, any> {
 
     state: { logged_in: boolean; navbar: JSX.Element }
 
