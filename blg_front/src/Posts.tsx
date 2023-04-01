@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import MainPage from "./Main";
 import "./Posts.css"
 
-class Posts extends Component {
+class Posts extends Component<any, any> {
 
     state: { posts: { created_at: string; content: string; username: string }[] }
 
