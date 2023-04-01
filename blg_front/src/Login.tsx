@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import './RegLogin.css';
 import Cookies from 'js-cookie';
 
-class Login extends Component {
+class Login extends Component<any, any> {
     state: { attempt_made: boolean; attempt_success: boolean; password: string; email: string; }
 
     constructor(props: any) {

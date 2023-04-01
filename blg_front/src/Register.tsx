@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './RegLogin.css';
 
-class Register extends Component {
+class Register extends Component<any, any> {
     state: { attempt_made: boolean; attempt_success: boolean; name: string; password: string; email: string; }
 
     constructor(props: any) {
@@ -36,7 +36,10 @@ class Register extends Component {
             })
             .then(data => {
                 if (data.error) this.setState({attempt_made: true, attempt_success: false})
-                else this.setState({attempt_made: true, attempt_success: true})
+                else {
+                    this.setState({attempt_made: true, attempt_success: true})
+                    window.location.href = '/posts';
+                }
             })
 
     }
