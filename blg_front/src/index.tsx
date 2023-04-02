@@ -4,7 +4,7 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import {Routes, Route, BrowserRouter} from "react-router-dom";
 import App from "./App";
-import MainPage from "./Main";
+import NavBar from "./NavBar";
 import Register from "./Register";
 import Login from "./Login";
 import Posts from "./Posts"
@@ -17,7 +17,7 @@ root.render(
     <React.StrictMode>
         <BrowserRouter>
             <Routes>
-                <Route path={"/"} element={<MainPage/>}/>
+                <Route path={"/"} element={<NavBar/>}/>
                 <Route path={"/App"} element={<App/>}/>
                 <Route path={"/register"} element={<Register/>}/>
                 <Route path={"/login"} element={<Login/>}/>

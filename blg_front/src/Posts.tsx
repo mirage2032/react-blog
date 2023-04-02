@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import MainPage from "./Main";
+import NavBar from "./NavBar";
 import "./Posts.css"
 
 class Posts extends Component<any, any> {
@@ -35,7 +35,7 @@ class Posts extends Component<any, any> {
     render() {
         return (
             <div>
-                <MainPage></MainPage>
+                <NavBar></NavBar>
                 <div className={'articles'}>
                     {(
                         this.state.posts.map((item, index) => (
