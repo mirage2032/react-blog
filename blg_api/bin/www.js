@@ -3,8 +3,21 @@ const cookieParser = require("cookie-parser");
 const mysql = require('mysql2')
 const express = require('express')
 const crypto = require("crypto");
+const {HfInference} = require('@huggingface/inference')
+const hf = new HfInference("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")
 
 const TOKEN_PASSWORD = "AstaEParolaFoarteSecreta";
+
+const databasecfg = {
+    host: "db-container", port: "3306", user: "user", password: "pass", database: "db",
+}
+
+const connection = mysql.createConnection(databasecfg)
+connection.connect()
+
+const app = express()
+app.use(express.json());
+app.use(cookieParser());
 
 function encrypt(objectToEncrypt, password) {
     const iv = crypto.randomBytes(16);
@@ -22,97 +35,76 @@ function decrypt(encryptedObject, password) {
     return JSON.parse(decrypted);
 }
 
-const databasecfg = {
-    host: "db-container",
-    port: "3306",
-    user: "user",
-    password: "pass",
-    database: "db",
-    connectTimeout: 60000,
-}
-
-const connection = mysql.createConnection(databasecfg)
-connection.connect()
-
-const app = express()
-app.use(express.json());
-app.use(cookieParser());
 app.listen(3010, () => {
     console.log(`API STARTED ON PORT 3010`)
 })
 app.post('/api/register', (req, res) => {
     const user = {
-        username: req.body.name,
-        password: sha256(req.body.password),
-        email: req.body.email
+        username: req.body.name, password: sha256(req.body.password), email: req.body.email
     };
     const query = 'INSERT INTO users (username,password,email,user_uid) VALUES (?,?,?,UUID())';
     const query_params = [user.username, user.password, user.email, user.user_uid];
     connection.query(query, query_params, (err, result) => {
         if (err) res.json({error: true, msg: err.message}).status(409)
-        else res.json({error: false, user_uid: result.insertId})
+        else res.json({
+            error: false, user_uid: result.insertId
+        })
     })
 })
 
 function makeToken(time_hr, user_uid) {
-    return encrypt(
-        {
-            user_uid,
-            expiration: Date.now() + (time_hr * 60 * 60 * 1000),
-            integrity: "INTEGRITY_CHECK",
-        },
-        TOKEN_PASSWORD
-    )
+    return encrypt({
+        user_uid, expiration: Date.now() + (time_hr * 60 * 60 * 1000), integrity: "INTEGRITY_CHECK",
+    }, TOKEN_PASSWORD)
 }
 
 function parseToken(cookie) {
-    if (!cookie)
-        return null;
+    if (!cookie) return null;
     const parsed_cookie = decrypt(cookie, TOKEN_PASSWORD);
-    if (parsed_cookie.integrity !== "INTEGRITY_CHECK")
-        return null;
-    if (Date.now() > parsed_cookie.expiration)
-        return null;
+    if (parsed_cookie.integrity !== "INTEGRITY_CHECK") return null;
+    if (Date.now() > parsed_cookie.expiration) return null;
     return parsed_cookie.user_uid;
 }
 
 app.post('/api/login', (req, res) => {
-    const sha256 = require('js-sha256');
     connection.query('SELECT * FROM users WHERE email = ? AND password = ?', [req.body.email, sha256(req.body.password)], (err, result) => {
         if (err || result.length === 0) res.json({error: true})
-        else res.json({error: false, user_token: makeToken(3 * 24, result[0].user_uid)})
+        else res.json({
+            error: false, user_token: makeToken(3 * 24, result[0].user_uid)
+        })
     })
 })
 
 app.post('/api/user/data', (req, res) => {
     const user_token = req.cookies.user_token ? JSON.parse(req.cookies.user_token) : null;
     const user_uid = parseToken(user_token);
-    if (!user_uid)
-        res.status(401).json({data: "Unauthorized"});
-    else
-        connection.query('SELECT * FROM users WHERE user_uid = ?', [user_uid], (err, result) => {
-            if (err || result.length === 0) res.status(401).json({data: "Unauthorized"});
-            else res.json({
-                username: result[0].username,
-                email: result[0].email,
-                created_at: result[0].created_at
-            })
+    if (!user_uid) res.status(401).json({data: "Unauthorized"}); else connection.query('SELECT * FROM users WHERE user_uid = ?', [user_uid], (err, result) => {
+        if (err || result.length === 0) res.status(401).json({data: "Unauthorized"}); else res.json({
+            username: result[0].username, email: result[0].email, created_at: result[0].created_at
         })
+    })
 })
 
 app.post('/api/posts', (req, res) => {
     const user_token = req.cookies.user_token ? JSON.parse(req.cookies.user_token) : null;
     const user_uid = parseToken(user_token);
     const category = req.body.category
-    if (!user_uid)
-        res.status(401).json({data: "Unauthorized"});
-    else
-        connection.query('SELECT posts.created_at, posts.content, users.username\n' +
-            'FROM posts\n' +
-            'JOIN users\n' +
-            'ON posts.user_uid = users.user_uid\n' +
-            'WHERE posts.category = ?\n' +
-            'ORDER BY posts.created_at DESC;',[category],(err,result) =>{
-            res.json(result)
+    if (!user_uid) res.status(401).json({data: "Unauthorized"}); else connection.query('SELECT posts.created_at, posts.content, users.username\n' + 'FROM posts\n' + 'JOIN users\n' + 'ON posts.user_uid = users.user_uid\n' + 'WHERE posts.category = ?\n' + 'ORDER BY posts.created_at DESC;', [category], (err, result) => {
+        res.json(result)
+    })
+})
+
+app.post('/api/chat/conversation', async (req, res) => {
+    try {
+        const response = await hf.conversational({
+            model: 'microsoft/DialoGPT-large', inputs: {
+                past_user_inputs: req.body.past_user_inputs,
+                generated_responses: req.body.generated_responses,
+                text: req.body.text
+            }
         })
+        res.json({"data": response.generated_text})
+    } catch (err) {
+        res.json({"data": "Error getting response from API"})
+    }
 })
