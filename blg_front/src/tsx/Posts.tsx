@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import NavBar from "./NavBar";
-import "./Posts.css"
+import "../scss/Posts.scss"
 import "./PostArticle"
 import PostArticle from "./PostArticle";
 import {useParams, Link} from "react-router-dom";

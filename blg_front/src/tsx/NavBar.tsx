@@ -1,11 +1,9 @@
 import React, {Component} from 'react';
-import './NavBar.css';
+import '../scss/NavBar.scss';
 import Cookies from "js-cookie";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faUser} from '@fortawesome/free-regular-svg-icons';
-import {Link, redirect} from "react-router-dom";
-import Login from "./Login";
-
+import {Link} from "react-router-dom";
 const navbar_title = (
     <h1>The Deal</h1>
 )

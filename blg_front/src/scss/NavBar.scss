@@ -1,7 +1,8 @@
+@use 'colors';
 
 body {
     width: 100vw;
-    background-color: #282c34;
+    background-color: colors.$main2;
     font-family: 'Sono', sans-serif;
 }
 
@@ -27,7 +28,7 @@ nav h1{
     min-width: 5em;
     width: 20vw;
     color: black;
-    background-color: #09c5e0;
+    background-color: colors.$main1;
     font-size: 2.5vw;
     font-family: 'Sono', sans-serif;
 }

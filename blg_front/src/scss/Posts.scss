@@ -1,3 +1,5 @@
+@use 'colors';
+
 .articles {
     display: grid;
     width: 70vw;
@@ -6,14 +8,14 @@
 
 .article {
     border-radius: 2em;
-    background-color: #09c5e0;
+    background-color: colors.$main1;
     margin: 1em 0;
     padding: 1em;
 }
 
 .article::before {
     position: absolute;
-    box-shadow: 0 0 8px 8px #282c34 inset;
+    box-shadow: 0 0 8px 8px colors.$main2 inset;
 }
 
 .article_username {
@@ -29,7 +31,7 @@
     text-align: center;
     display: block;
     font-size: 1.5em;
-    color: #09c5e0;
+    color: colors.$main1;
 }
 .categcontainer div {
     display: flex;
@@ -39,6 +41,6 @@
 .categcontainer div button {
     font-size: 2.5em;
     font-family: 'Sono', sans-serif;
-    background-color: #09c0e0;
-    color: #282c34;
+    background-color: colors.$main1;
+    color: colors.$main2;
 }

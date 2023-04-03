@@ -1,3 +1,5 @@
+@use 'colors';
+
 form{
     padding: 2em;
 }
@@ -7,22 +9,22 @@ form{
 .articlelabel span{
     display: block;
     font-size: 1.5em;
-    color: #09c5e0;
+    color: colors.$main1;
 }
 
 .articleinput textarea {
     width: 100%;
     font-size: 2em;
     height: 4em;
-    background-color: #09c0e0;
-    color: #282c34;
+    background-color: colors.$main1;
+    color: colors.$main2;
 }
 
 .articlecategory select {
     font-size: 2.5em;
     font-family: 'Sono', sans-serif;
-    background-color: #09c0e0;
-    color: #282c34;
+    background-color: colors.$main1;
+    color: colors.$main2;
 }
 
 .spacebetween {
@@ -33,6 +35,6 @@ form{
 .postarticlesubmit {
     font-size: 2.5em;
     font-family: 'Sono', sans-serif;
-    background-color: #09c0e0;
-    color: #282c34;
+    background-color: colors.$main1;
+    color: colors.$main2;
 }

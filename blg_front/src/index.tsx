@@ -1,13 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import './index.scss';
 import reportWebVitals from './reportWebVitals';
 import {Routes, Route, BrowserRouter, Navigate} from "react-router-dom";
-import NavBar from "./NavBar";
-import Register from "./Register";
-import Login from "./Login";
-import PostsCategory from "./Posts";
-
+import Register from "./tsx/Register";
+import Login from "./tsx/Login";
+import PostsCategory from "./tsx/Posts";
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );

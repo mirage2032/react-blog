@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import "./PostArticle.css"
+import "../scss/PostArticle.scss"
 
 type PostArticlePosts = {updatefunc: Function}
 class PostArticle extends Component<PostArticlePosts, any> {

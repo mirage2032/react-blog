@@ -1,17 +1,16 @@
 import React, {Component} from 'react';
-import './RegLogin.css';
-import Cookies from 'js-cookie';
-import {Navigate, redirect} from "react-router-dom";
-import PostArticle from "./PostArticle";
+import '../scss/RegLogin.scss';
+import {Navigate} from "react-router-dom";
 
-class Login extends Component<any, any> {
-    state: { attempt_made: boolean; attempt_success: boolean; password: string; email: string; }
+class Register extends Component<any, any> {
+    state: { attempt_made: boolean; attempt_success: boolean; name: string; password: string; email: string; }
 
     constructor(props: any) {
         super(props);
         this.state = {
             attempt_made: false,
             attempt_success: false,
+            name: '',
             email: '',
             password: '',
         };
@@ -24,15 +23,15 @@ class Login extends Component<any, any> {
     handleSubmit(event: { preventDefault: () => void; }) {
         event.preventDefault();
         const sha256 = require('js-sha256');
-        const {password, email} = this.state;
-        fetch('/api/login', {
+        const {name, password, email} = this.state;
+        fetch('/api/register', {
             method: 'POST',
-            body: JSON.stringify({password: sha256(password), email}),
+            body: JSON.stringify({name, password: sha256(password), email}),
             headers: {'Content-Type': 'application/json'}
         })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('An error occured trying to create the account.');
+                    throw new Error('Network response was not ok');
                 }
                 return response.json();
             })
@@ -40,8 +39,6 @@ class Login extends Component<any, any> {
                 if (data.error) this.setState({attempt_made: true, attempt_success: false})
                 else {
                     this.setState({attempt_made: true, attempt_success: true})
-                    Cookies.set("user_token", JSON.stringify(data.user_token), {expires: 3 * 24});
-                    window.history.replaceState(null,'','/posts')
                 }
             })
 
@@ -53,21 +50,24 @@ class Login extends Component<any, any> {
                 <main>
                     <div className={"regform_container"}>
                         <form onSubmit={this.handleSubmit.bind(this)}>
-                            <label><span>EMAIL:</span>
-                                <input type="email" name="email" onChange={this.handleChange.bind(this)} required/>
+                            <label><span>NAME:</span>
+                                <input type="text" name="name" onChange={this.handleChange.bind(this)} required/>
                             </label><br/>
                             <label><span>PASSWORD:</span>
                                 <input type="password" name="password" onChange={this.handleChange.bind(this)}
                                        required/>
                             </label><br/>
+                            <label><span>EMAIL:</span>
+                                <input type="email" name="email" onChange={this.handleChange.bind(this)} required/>
+                            </label><br/>
                             <button className={"buttonSubmit"} type="submit"
-                                    style={{visibility: this.state.attempt_success ? 'hidden' : 'visible'}}>Log In
+                                    style={{visibility: this.state.attempt_success ? 'hidden' : 'visible'}}>Register
                             </button>
                             {
                                 this.state.attempt_made ? (
                                     this.state.attempt_success ?
-                                        <Navigate to='/posts'></Navigate>
-                                        : <p className={"regnotif regnotifneg"}>FAILED</p>
+                                        <Navigate to='/login'></Navigate>
+                                        : <p className={"regnotif regnotifneg"}>REGISTRATION FAILED</p>
                                 ) : <p className={"regnotif"}>&nbsp;</p>
                             }
                         </form>
@@ -79,4 +79,4 @@ class Login extends Component<any, any> {
 
 }
 
-export default Login;
+export default Register;
