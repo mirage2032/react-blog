@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import {Routes, Route, BrowserRouter} from "react-router-dom";
+import {Routes, Route, BrowserRouter, Navigate} from "react-router-dom";
 import NavBar from "./NavBar";
 import Register from "./Register";
 import Login from "./Login";
@@ -16,10 +16,11 @@ root.render(
     <React.StrictMode>
         <BrowserRouter>
             <Routes>
-                <Route path={"/"} element={<NavBar/>}/>
-                <Route path={"/register"} element={<Register/>}/>
-                <Route path={"/login"} element={<Login/>}/>
-                <Route path={"/posts/:category"} element={<PostsCategory/>}></Route>
+                <Route path="/" element={<NavBar/>}/>
+                <Route path="/register" element={<Register/>}/>
+                <Route path="/login" element={<Login/>}/>
+                <Route path="/posts" element={<Navigate to="/posts/buy" replace></Navigate>}></Route>
+                <Route path="/posts/:category" element={<PostsCategory/>}></Route>
             </Routes>
         </BrowserRouter>
     </React.StrictMode>

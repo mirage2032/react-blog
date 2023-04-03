@@ -18,6 +18,13 @@ class Posts extends Component<CategoryChoice, PostsState> {
             posts: []
         };
     }
+
+
+
+    componentDidMount() {
+        this.fetchCategory()
+    }
+
     fetchCategory(){
         fetch('/api/posts', {
             method: 'POST',
@@ -38,12 +45,11 @@ class Posts extends Component<CategoryChoice, PostsState> {
     }
 
     render() {
-        this.fetchCategory()
         return (
             <div>
                 <NavBar></NavBar>
                 <div className={'articles'}>
-                    <PostArticle></PostArticle>
+                    <PostArticle updatefunc={this.fetchCategory.bind(this)}></PostArticle>
                     <div className={"categcontainer"}>
                         <p>Choose Category</p>
                         <div>

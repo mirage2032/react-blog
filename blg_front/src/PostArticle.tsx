@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import "./PostArticle.css"
 
-class PostArticle extends Component<any, any> {
+type PostArticlePosts = {updatefunc: Function}
+class PostArticle extends Component<PostArticlePosts, any> {
 
     state: { content: string; category: string }
 
@@ -29,12 +30,9 @@ class PostArticle extends Component<any, any> {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                return response.json();
+                this.props.updatefunc();
             })
 
-    }
-
-    componentDidMount() {
     }
 
     render() {
