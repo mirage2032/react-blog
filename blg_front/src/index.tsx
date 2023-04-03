@@ -6,7 +6,7 @@ import {Routes, Route, BrowserRouter} from "react-router-dom";
 import NavBar from "./NavBar";
 import Register from "./Register";
 import Login from "./Login";
-import Posts from "./Posts"
+import PostsCategory from "./Posts";
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -19,7 +19,7 @@ root.render(
                 <Route path={"/"} element={<NavBar/>}/>
                 <Route path={"/register"} element={<Register/>}/>
                 <Route path={"/login"} element={<Login/>}/>
-                <Route path={"/posts"} element={<Posts/>}></Route>
+                <Route path={"/posts/:category"} element={<PostsCategory/>}></Route>
             </Routes>
         </BrowserRouter>
     </React.StrictMode>
