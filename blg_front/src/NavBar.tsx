@@ -3,7 +3,7 @@ import './NavBar.css';
 import Cookies from "js-cookie";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faUser} from '@fortawesome/free-regular-svg-icons';
-import {Link} from "react-router-dom";
+import {Link, redirect} from "react-router-dom";
 import Login from "./Login";
 
 const navbar_title = (
@@ -32,10 +32,7 @@ class NavBar extends Component<any, any> {
 
     logOut() {
         Cookies.remove("user_token");
-        this.setState({
-            logged_in: false,
-            navbar: navbar_nologin
-        })
+        window.location.replace('/')
     }
 
     componentDidMount() {
