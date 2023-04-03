@@ -42,7 +42,7 @@ app.post('/api/register', (req, res) => {
     const user = {
         username: req.body.name, password: sha256(req.body.password), email: req.body.email
     };
-    const query = 'INSERT INTO users (username,password,email,user_uid) VALUES (?,?,?,UUID())';
+    const query = 'INSERT INTO users (username,password,email,user_uid) VALUES (?,?,?,0)';
     const query_params = [user.username, user.password, user.email, user.user_uid];
     connection.query(query, query_params, (err, result) => {
         if (err) res.json({msg: err.message}).status(409)
@@ -89,16 +89,25 @@ app.post('/api/user/data', (req, res) => {
 app.post('/api/postarticle', (req, res) => {
     const user_token = req.cookies.user_token ? JSON.parse(req.cookies.user_token) : null;
     const user_uid = parseToken(user_token);
-    const query = 'INSERT INTO posts(user_uid,content,category) VALUES (*,*,*)';
+    const query = 'INSERT INTO posts (post_uid, user_uid, content, category) VALUES (0,?,?,?)';
     if (!user_uid) res.status(401).json({data: "Unauthorized"});
     else connection.query(query, [user_uid,req.body.content,req.body.category], (err, result) => {
         if (err) res.json({msg: err.message}).status(500)
         else res.json({
-            user_uid: result.insertId
+            post_uid: result.insertId
         })
     })
 
 
+})
+
+app.post('/api/posts', (req, res) => {
+    const user_token = req.cookies.user_token ? JSON.parse(req.cookies.user_token) : null;
+    const user_uid = parseToken(user_token);
+    const category = req.body.category
+    if (!user_uid) res.status(401).json({data: "Unauthorized"}); else connection.query('SELECT posts.created_at, posts.content, users.username\n' + 'FROM posts\n' + 'JOIN users\n' + 'ON posts.user_uid = users.user_uid\n' + 'WHERE posts.category = ?\n' + 'ORDER BY posts.created_at DESC;', [category], (err, result) => {
+        res.json(result)
+    })
 })
 
 app.post('/api/chat/conversation', async (req, res) => {

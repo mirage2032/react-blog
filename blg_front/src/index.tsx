@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import {Routes, Route, BrowserRouter} from "react-router-dom";
-import App from "./App";
 import NavBar from "./NavBar";
 import Register from "./Register";
 import Login from "./Login";
@@ -18,7 +17,6 @@ root.render(
         <BrowserRouter>
             <Routes>
                 <Route path={"/"} element={<NavBar/>}/>
-                <Route path={"/App"} element={<App/>}/>
                 <Route path={"/register"} element={<Register/>}/>
                 <Route path={"/login"} element={<Login/>}/>
                 <Route path={"/posts"} element={<Posts/>}></Route>

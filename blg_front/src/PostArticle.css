@@ -1,0 +1,38 @@
+form{
+    padding: 2em;
+}
+.articlelabel{
+}
+
+.articlelabel span{
+    display: block;
+    font-size: 1.5em;
+    color: #09c5e0;
+}
+
+.articleinput textarea {
+    width: 100%;
+    font-size: 2em;
+    height: 4em;
+    background-color: #09c0e0;
+    color: #282c34;
+}
+
+.articlecategory select {
+    font-size: 2.5em;
+    font-family: 'Sono', sans-serif;
+    background-color: #09c0e0;
+    color: #282c34;
+}
+
+.spacebetween {
+    display: flex;
+    justify-content: space-between;
+}
+
+.postarticlesubmit {
+    font-size: 2.5em;
+    font-family: 'Sono', sans-serif;
+    background-color: #09c0e0;
+    color: #282c34;
+}
