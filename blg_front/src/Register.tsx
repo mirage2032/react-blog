@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './RegLogin.css';
+import {redirect} from "react-router-dom";
 
 class Register extends Component<any, any> {
     state: { attempt_made: boolean; attempt_success: boolean; name: string; password: string; email: string; }
@@ -38,7 +39,7 @@ class Register extends Component<any, any> {
                 if (data.error) this.setState({attempt_made: true, attempt_success: false})
                 else {
                     this.setState({attempt_made: true, attempt_success: true})
-                    window.location.href = '/login';
+                    redirect('/login');
                 }
             })
 

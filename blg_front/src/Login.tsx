@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import './RegLogin.css';
 import Cookies from 'js-cookie';
+import {redirect} from "react-router-dom";
+import PostArticle from "./PostArticle";
 
 class Login extends Component<any, any> {
     state: { attempt_made: boolean; attempt_success: boolean; password: string; email: string; }
@@ -39,7 +41,7 @@ class Login extends Component<any, any> {
                 else {
                     this.setState({attempt_made: true, attempt_success: true})
                     Cookies.set("user_token", JSON.stringify(data.user_token), {expires: 3 * 24});
-                    window.location.href = '/posts';
+                    window.history.replaceState(null,'','/posts')
                 }
             })
 
