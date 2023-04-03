@@ -31,10 +31,6 @@ class PostArticle extends Component<any, any> {
                 }
                 return response.json();
             })
-            .then(() => {
-                    window.location.href = '/posts';
-                }
-            )
 
     }
 
