@@ -55,7 +55,7 @@ class Posts extends Component<CategoryChoice, PostsState> {
             <div>
                 <NavBar></NavBar>
                 <div className={'articles'}>
-                    <PostArticle updatefunc={this.fetchCategory.bind(this)}></PostArticle>
+                    <PostArticle updatefunc={this.fetchCategory.bind(this)} category={this.props.category}></PostArticle>
                     <div className={"categcontainer"}>
                         <p>Choose Category</p>
                         <div>

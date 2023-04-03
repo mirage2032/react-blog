@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
 import "../scss/PostArticle.scss"
 
-type PostArticlePosts = {updatefunc: Function}
-class PostArticle extends Component<PostArticlePosts, any> {
+type PostArticleProps = { updatefunc: Function; category: string }
 
-    state: { content: string; category: string }
+class PostArticle extends Component<PostArticleProps, any> {
+
+    state: { content: string }
 
     constructor(props: any) {
         super(props);
         this.state = {
-            content: "",
-            category: "buy"
+            content: ""
         };
     }
 
@@ -20,7 +20,8 @@ class PostArticle extends Component<PostArticlePosts, any> {
 
     handleSubmit(event: { preventDefault: () => void; }) {
         event.preventDefault();
-        const {content, category} = this.state;
+        const {content} = this.state;
+        const {category} = this.props;
         fetch('/api/postarticle', {
             method: 'POST',
             body: JSON.stringify({content, category}),
@@ -43,16 +44,7 @@ class PostArticle extends Component<PostArticlePosts, any> {
                         <span>Contenty:</span>
                         <textarea name="content" onChange={this.handleChange.bind(this)} required/>
                     </label>
-                    <div className={"spacebetween"}>
-                        <label className={"articlelabel articlecategory"}>
-                            <span>Category:</span>
-                            <select name="category" defaultValue="buy" onChange={this.handleChange.bind(this)}>
-                                <option value={"buy"}>Buy</option>
-                                <option value={"sell"}>Sell</option>
-                            </select>
-                        </label>
-                        <button className={"postarticlesubmit"} type="submit">Post</button>
-                    </div>
+                    <button className={"postarticlesubmit"} type="submit">Post</button>
                 </form>
             </div>
         )
