@@ -3,10 +3,14 @@ import NavBar from "./NavBar";
 import "./Posts.css"
 import "./PostArticle"
 import PostArticle from "./PostArticle";
+import {useParams, Link} from "react-router-dom";
 
-class Posts extends Component<any, any> {
+type CategoryChoice = {
+    category:string;
+}
 
-    state: { posts: { created_at: string; content: string; username: string }[] }
+type PostsState = { posts: { created_at: string; content: string; username: string }[] }
+class Posts extends Component<CategoryChoice, PostsState> {
 
     constructor(props: any) {
         super(props);
@@ -14,15 +18,10 @@ class Posts extends Component<any, any> {
             posts: []
         };
     }
-
-    componentDidMount() {
-        this.setBuy()
-    }
-
-    setCategory(category:string){
+    fetchCategory(){
         fetch('/api/posts', {
             method: 'POST',
-            body: JSON.stringify({category: category}),
+            body: JSON.stringify({category: this.props.category}),
             headers: {'Content-Type': 'application/json'}
         })
             .then(response => {
@@ -37,14 +36,9 @@ class Posts extends Component<any, any> {
                 else this.setState({posts: data})
             })
     }
-    setBuy(){
-        this.setCategory('buy')
-    }
-    setSell(){
-        this.setCategory('sell')
-    }
 
     render() {
+        this.fetchCategory()
         return (
             <div>
                 <NavBar></NavBar>
@@ -53,8 +47,8 @@ class Posts extends Component<any, any> {
                     <div className={"categcontainer"}>
                         <p>Choose Category</p>
                         <div>
-                            <button onClick={this.setBuy.bind(this)}>Buy</button>
-                            <button onClick={this.setSell.bind(this)}>Sell</button>
+                            <Link to='/posts/buy'><button>Buy</button></Link>
+                            <Link to='/posts/sell'><button>Sell</button></Link>
                         </div>
                     </div>
                     {(
@@ -73,4 +67,11 @@ class Posts extends Component<any, any> {
 
 }
 
-export default Posts;
+function PostsCategory() {
+    const {category} = useParams();
+    return(
+        <Posts category={category!}></Posts>
+    )
+}
+
+export default PostsCategory;

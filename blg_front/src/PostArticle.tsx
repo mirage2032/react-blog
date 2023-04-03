@@ -31,10 +31,6 @@ class PostArticle extends Component<any, any> {
                 }
                 return response.json();
             })
-            .then(() => {
-                    window.location.href = '/posts';
-                }
-            )
 
     }
 
@@ -52,8 +48,8 @@ class PostArticle extends Component<any, any> {
                     <div className={"spacebetween"}>
                         <label className={"articlelabel articlecategory"}>
                             <span>Category:</span>
-                            <select name="category" onChange={this.handleChange.bind(this)}>
-                                <option value={"buy"} selected>Buy</option>
+                            <select name="category" defaultValue="buy" onChange={this.handleChange.bind(this)}>
+                                <option value={"buy"}>Buy</option>
                                 <option value={"sell"}>Sell</option>
                             </select>
                         </label>

@@ -3,6 +3,8 @@ import './NavBar.css';
 import Cookies from "js-cookie";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faUser} from '@fortawesome/free-regular-svg-icons';
+import {Link} from "react-router-dom";
+import Login from "./Login";
 
 const navbar_title = (
     <h1>The Deal</h1>
@@ -10,9 +12,9 @@ const navbar_title = (
 
 const navbar_nologin = (
     <nav>
-        <a className={'navButton navButton-left'} href={"/login"}>LOG IN</a>
+        <Link to="/login" className={'navButton navButton-left'}>LOGIN</Link>
         {navbar_title}
-        <a className={'navButton navButton-right'} href={"/register"}>REGISTER</a>
+        <Link to="/register" className={'navButton navButton-right'}>REGISTER</Link>
     </nav>
 )
 
@@ -55,9 +57,9 @@ class NavBar extends Component<any, any> {
                             <button className={'navButton navButton-left'} onClick={this.logOut.bind(this)}>LOG OUT
                             </button>
                             {navbar_title}
-                            <a className={'navButton navButton-right'} href={"/account"}><FontAwesomeIcon
+                            <Link to="/account" className={'navButton navButton-right'}><FontAwesomeIcon
                                 icon={faUser}/>&nbsp;{data.username}
-                            </a>
+                            </Link>
                         </nav>
                     )
                 })
