@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './RegLogin.css';
 import Cookies from 'js-cookie';
-import {redirect} from "react-router-dom";
+import {Navigate, redirect} from "react-router-dom";
 import PostArticle from "./PostArticle";
 
 class Login extends Component<any, any> {
@@ -66,7 +66,7 @@ class Login extends Component<any, any> {
                             {
                                 this.state.attempt_made ? (
                                     this.state.attempt_success ?
-                                        <p className={"regnotif regnotifpos"}>SUCCESS</p>
+                                        <Navigate to='/posts'></Navigate>
                                         : <p className={"regnotif regnotifneg"}>FAILED</p>
                                 ) : <p className={"regnotif"}>&nbsp;</p>
                             }

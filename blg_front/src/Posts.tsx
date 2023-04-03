@@ -25,6 +25,12 @@ class Posts extends Component<CategoryChoice, PostsState> {
         this.fetchCategory()
     }
 
+    componentDidUpdate(prevProps: Readonly<CategoryChoice>, prevState: Readonly<PostsState>, snapshot?: any) {
+        if (prevProps.category!==this.props.category){
+            this.fetchCategory()
+        }
+    }
+
     fetchCategory(){
         fetch('/api/posts', {
             method: 'POST',

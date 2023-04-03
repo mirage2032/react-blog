@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './RegLogin.css';
-import {redirect} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 
 class Register extends Component<any, any> {
     state: { attempt_made: boolean; attempt_success: boolean; name: string; password: string; email: string; }
@@ -39,7 +39,6 @@ class Register extends Component<any, any> {
                 if (data.error) this.setState({attempt_made: true, attempt_success: false})
                 else {
                     this.setState({attempt_made: true, attempt_success: true})
-                    redirect('/login');
                 }
             })
 
@@ -67,7 +66,7 @@ class Register extends Component<any, any> {
                             {
                                 this.state.attempt_made ? (
                                     this.state.attempt_success ?
-                                        <p className={"regnotif regnotifpos"}>REGISTERED</p>
+                                        <Navigate to='/login'></Navigate>
                                         : <p className={"regnotif regnotifneg"}>REGISTRATION FAILED</p>
                                 ) : <p className={"regnotif"}>&nbsp;</p>
                             }

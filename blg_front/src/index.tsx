@@ -16,7 +16,7 @@ root.render(
     <React.StrictMode>
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<NavBar/>}/>
+                <Route path="/" element={<Navigate to='/posts'></Navigate>}/>
                 <Route path="/register" element={<Register/>}/>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/posts" element={<Navigate to="/posts/buy" replace></Navigate>}></Route>
