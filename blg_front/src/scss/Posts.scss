@@ -43,4 +43,11 @@
     font-family: 'Sono', sans-serif;
     background-color: colors.$main1;
     color: colors.$main2;
+    border: solid 2px colors.$main2;
+}
+
+.articlecontainer {
+    padding: 2em;
+    border-radius: 2em;
+    background-color: colors.$main3;
 }

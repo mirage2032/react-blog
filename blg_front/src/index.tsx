@@ -6,6 +6,7 @@ import {Routes, Route, BrowserRouter, Navigate} from "react-router-dom";
 import Register from "./tsx/Register";
 import Login from "./tsx/Login";
 import PostsCategory from "./tsx/Posts";
+
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
@@ -17,8 +18,10 @@ root.render(
                 <Route path="/" element={<Navigate to='/posts'></Navigate>}/>
                 <Route path="/register" element={<Register/>}/>
                 <Route path="/login" element={<Login/>}/>
-                <Route path="/posts" element={<Navigate to="/posts/buy" replace></Navigate>}></Route>
-                <Route path="/posts/:category" element={<PostsCategory/>}></Route>
+                <Route path="/posts">
+                    <Route index element={<Navigate to="/posts/buy" replace></Navigate>}></Route>
+                    <Route path=":category" element={<PostsCategory/>}></Route>
+                </Route>
             </Routes>
         </BrowserRouter>
     </React.StrictMode>

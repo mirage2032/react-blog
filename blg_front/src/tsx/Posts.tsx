@@ -56,6 +56,7 @@ class Posts extends Component<CategoryChoice, PostsState> {
                 <NavBar></NavBar>
                 <div className={'articles'}>
                     <PostArticle updatefunc={this.fetchCategory.bind(this)} category={this.props.category}></PostArticle>
+                    <main className={"articlecontainer"}>
                     <div className={"categcontainer"}>
                         <p>Choose Category</p>
                         <div>
@@ -68,15 +69,30 @@ class Posts extends Component<CategoryChoice, PostsState> {
                             <article className={'article'} key={index}>
                                 <span className={'article_username'}>User: {item.username}</span>
                                 <p className={'article_content'}>{item.content}</p>
-                                <p className={'article_created_at'}>{item.created_at}</p>
+                                <p className={'article_created_at'}>{parseDBTime(item.created_at)}</p>
                             </article>
                         ))
                     )}
+                    </main>
                 </div>
             </div>
         )
     }
 
+}
+
+function parseDBTime(dbtime: string){
+    const date = new Date(dbtime);
+    const options: Intl.DateTimeFormatOptions = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        hour12: false,
+    };
+    return date.toLocaleString('en-US', options);
 }
 
 function PostsCategory() {
