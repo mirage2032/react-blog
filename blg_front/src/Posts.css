@@ -11,11 +11,34 @@
     padding: 1em;
 }
 
-.article::before{
+.article::before {
     position: absolute;
     box-shadow: 0 0 8px 8px #282c34 inset;
 }
 
 .article_username {
     float: right;
+}
+
+.categcontainer {
+    width: 100%;
+    margin: auto;
+}
+
+.categcontainer p {
+    text-align: center;
+    display: block;
+    font-size: 1.5em;
+    color: #09c5e0;
+}
+.categcontainer div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.categcontainer div button {
+    font-size: 2.5em;
+    font-family: 'Sono', sans-serif;
+    background-color: #09c0e0;
+    color: #282c34;
 }

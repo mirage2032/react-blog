@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import './Main.css';
+import './NavBar.css';
 import Cookies from "js-cookie";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faUser} from '@fortawesome/free-regular-svg-icons';
@@ -16,7 +16,7 @@ const navbar_nologin = (
     </nav>
 )
 
-class MainPage extends Component<any, any> {
+class NavBar extends Component<any, any> {
 
     state: { logged_in: boolean; navbar: JSX.Element }
 
@@ -70,4 +70,4 @@ class MainPage extends Component<any, any> {
 
 }
 
-export default MainPage;
+export default NavBar;

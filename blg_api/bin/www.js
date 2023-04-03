@@ -42,12 +42,12 @@ app.post('/api/register', (req, res) => {
     const user = {
         username: req.body.name, password: sha256(req.body.password), email: req.body.email
     };
-    const query = 'INSERT INTO users (username,password,email,user_uid) VALUES (?,?,?,UUID())';
+    const query = 'INSERT INTO users (username,password,email,user_uid) VALUES (?,?,?,0)';
     const query_params = [user.username, user.password, user.email, user.user_uid];
     connection.query(query, query_params, (err, result) => {
-        if (err) res.json({error: true, msg: err.message}).status(409)
+        if (err) res.json({msg: err.message}).status(409)
         else res.json({
-            error: false, user_uid: result.insertId
+            user_uid: result.insertId
         })
     })
 })
@@ -68,9 +68,9 @@ function parseToken(cookie) {
 
 app.post('/api/login', (req, res) => {
     connection.query('SELECT * FROM users WHERE email = ? AND password = ?', [req.body.email, sha256(req.body.password)], (err, result) => {
-        if (err || result.length === 0) res.json({error: true})
+        if (err || result.length === 0) res.code(400).json()
         else res.json({
-            error: false, user_token: makeToken(3 * 24, result[0].user_uid)
+            user_token: makeToken(3 * 24, result[0].user_uid)
         })
     })
 })
@@ -78,11 +78,27 @@ app.post('/api/login', (req, res) => {
 app.post('/api/user/data', (req, res) => {
     const user_token = req.cookies.user_token ? JSON.parse(req.cookies.user_token) : null;
     const user_uid = parseToken(user_token);
-    if (!user_uid) res.status(401).json({data: "Unauthorized"}); else connection.query('SELECT * FROM users WHERE user_uid = ?', [user_uid], (err, result) => {
+    if (!user_uid) res.status(401).json({data: "Unauthorized"});
+    else connection.query('SELECT * FROM users WHERE user_uid = ?', [user_uid], (err, result) => {
         if (err || result.length === 0) res.status(401).json({data: "Unauthorized"}); else res.json({
             username: result[0].username, email: result[0].email, created_at: result[0].created_at
         })
     })
+})
+
+app.post('/api/postarticle', (req, res) => {
+    const user_token = req.cookies.user_token ? JSON.parse(req.cookies.user_token) : null;
+    const user_uid = parseToken(user_token);
+    const query = 'INSERT INTO posts (post_uid, user_uid, content, category) VALUES (0,?,?,?)';
+    if (!user_uid) res.status(401).json({data: "Unauthorized"});
+    else connection.query(query, [user_uid,req.body.content,req.body.category], (err, result) => {
+        if (err) res.json({msg: err.message}).status(500)
+        else res.json({
+            post_uid: result.insertId
+        })
+    })
+
+
 })
 
 app.post('/api/posts', (req, res) => {
