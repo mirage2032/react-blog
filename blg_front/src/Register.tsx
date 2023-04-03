@@ -38,7 +38,7 @@ class Register extends Component<any, any> {
                 if (data.error) this.setState({attempt_made: true, attempt_success: false})
                 else {
                     this.setState({attempt_made: true, attempt_success: true})
-                    window.location.href = '/posts';
+                    window.location.href = '/login';
                 }
             })
 

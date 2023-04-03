@@ -15,6 +15,10 @@ class Posts extends Component<any, any> {
         };
     }
 
+    componentDidMount() {
+        this.setBuy()
+    }
+
     setCategory(category:string){
         fetch('/api/posts', {
             method: 'POST',
