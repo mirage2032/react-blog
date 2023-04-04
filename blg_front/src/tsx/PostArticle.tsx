@@ -17,23 +17,20 @@ class PostArticle extends Component<PostArticleProps, any> {
     handleChange(event: React.ChangeEvent<HTMLTextAreaElement | HTMLSelectElement>) {
         this.setState({[event.target.name]: event.target.value});
     }
-
-    handleSubmit(event: { preventDefault: () => void; }) {
+    async handleSubmit(event: any) {
         event.preventDefault();
         const {content} = this.state;
         const {category} = this.props;
-        fetch('/api/postarticle', {
+        const response = await fetch('/api/postarticle', {
             method: 'POST',
             body: JSON.stringify({content, category}),
             headers: {'Content-Type': 'application/json'}
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                this.props.updatefunc();
-            })
-
+        if (!response.ok){
+            console.log("Response from API was not OK.")
+            return
+        }
+        this.props.updatefunc()
     }
 
     render() {
