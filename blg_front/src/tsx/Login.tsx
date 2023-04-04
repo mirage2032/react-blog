@@ -3,6 +3,7 @@ import '../scss/RegLogin.scss';
 import Cookies from 'js-cookie';
 import {Navigate} from "react-router-dom";
 import {sha256} from 'js-sha256';
+import {tokendata_encrypted} from "./types/common";
 
 class Login extends Component<any, any> {
     state: { attempt_made: boolean; attempt_success: boolean; password: string; email: string; }
@@ -34,7 +35,7 @@ class Login extends Component<any, any> {
             console.log("Response from API was not OK.")
             return
         }
-        const data = await response.json()
+        const data: { user_token: tokendata_encrypted } = await response.json()
         this.setState({attempt_made: true, attempt_success: true})
         Cookies.set("user_token", JSON.stringify(data.user_token), {expires: 3 * 24});
     }
