@@ -19,8 +19,6 @@ class Posts extends Component<CategoryChoice, PostsState> {
         };
     }
 
-
-
     componentDidMount() {
         this.fetchCategory()
     }
