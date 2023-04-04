@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faUser} from '@fortawesome/free-regular-svg-icons';
 import {Link} from "react-router-dom";
+
 const navbar_title = (
     <h1>The Deal</h1>
 )

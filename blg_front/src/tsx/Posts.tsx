@@ -3,13 +3,14 @@ import NavBar from "./NavBar";
 import "../scss/Posts.scss"
 import "./PostArticle"
 import PostArticle from "./PostArticle";
-import {useParams, Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 
 type CategoryChoice = {
-    category:string;
+    category: string;
 }
 
 type PostsState = { posts: { created_at: string; content: string; username: string }[] }
+
 class Posts extends Component<CategoryChoice, PostsState> {
 
     constructor(props: any) {
@@ -24,12 +25,12 @@ class Posts extends Component<CategoryChoice, PostsState> {
     }
 
     componentDidUpdate(prevProps: Readonly<CategoryChoice>, prevState: Readonly<PostsState>, snapshot?: any) {
-        if (prevProps.category!==this.props.category){
+        if (prevProps.category !== this.props.category) {
             this.fetchCategory()
         }
     }
 
-    fetchCategory(){
+    fetchCategory() {
         fetch('/api/posts', {
             method: 'POST',
             body: JSON.stringify({category: this.props.category}),
@@ -53,24 +54,29 @@ class Posts extends Component<CategoryChoice, PostsState> {
             <div>
                 <NavBar></NavBar>
                 <div className={'articles'}>
-                    <PostArticle updatefunc={this.fetchCategory.bind(this)} category={this.props.category}></PostArticle>
+                    <PostArticle updatefunc={this.fetchCategory.bind(this)}
+                                 category={this.props.category}></PostArticle>
                     <main className={"articlecontainer"}>
-                    <div className={"categcontainer"}>
-                        <p>Choose Category</p>
-                        <div>
-                            <Link to='/posts/buy'><button>Buy</button></Link>
-                            <Link to='/posts/sell'><button>Sell</button></Link>
+                        <div className={"categcontainer"}>
+                            <p>Choose Category</p>
+                            <div>
+                                <Link to='/posts/buy'>
+                                    <button>Buy</button>
+                                </Link>
+                                <Link to='/posts/sell'>
+                                    <button>Sell</button>
+                                </Link>
+                            </div>
                         </div>
-                    </div>
-                    {(
-                        this.state.posts.map((item, index) => (
-                            <article className={'article'} key={index}>
-                                <span className={'article_username'}>User: {item.username}</span>
-                                <p className={'article_content'}>{item.content}</p>
-                                <p className={'article_created_at'}>{parseDBTime(item.created_at)}</p>
-                            </article>
-                        ))
-                    )}
+                        {(
+                            this.state.posts.map((item, index) => (
+                                <article className={'article'} key={index}>
+                                    <span className={'article_username'}>User: {item.username}</span>
+                                    <p className={'article_content'}>{item.content}</p>
+                                    <p className={'article_created_at'}>{parseDBTime(item.created_at)}</p>
+                                </article>
+                            ))
+                        )}
                     </main>
                 </div>
             </div>
@@ -79,7 +85,7 @@ class Posts extends Component<CategoryChoice, PostsState> {
 
 }
 
-function parseDBTime(dbtime: string){
+function parseDBTime(dbtime: string) {
     const date = new Date(dbtime);
     const options: Intl.DateTimeFormatOptions = {
         year: 'numeric',
@@ -95,7 +101,7 @@ function parseDBTime(dbtime: string){
 
 function PostsCategory() {
     const {category} = useParams();
-    return(
+    return (
         <Posts category={category!}></Posts>
     )
 }

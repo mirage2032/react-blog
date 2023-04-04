@@ -1,3 +1,4 @@
 */node_modules
 */package-lock.json
 blg_db/data/*
+/blg_api/dist/*

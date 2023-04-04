@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.scss';
 import reportWebVitals from './reportWebVitals';
-import {Routes, Route, BrowserRouter, Navigate} from "react-router-dom";
+import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Register from "./tsx/Register";
 import Login from "./tsx/Login";
 import PostsCategory from "./tsx/Posts";

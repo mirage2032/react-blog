@@ -22,7 +22,7 @@ services:
     volumes:
       - ./blg_api:/web
     working_dir: /web
-    command: sh -c "npm install --no-fund --no-audit && npm start"
+    command: sh -c "npm install --no-fund --no-audit && npm run build && npm run start"
     depends_on:
       db-container:
         condition: service_healthy
