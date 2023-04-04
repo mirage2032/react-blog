@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import '../scss/RegLogin.scss';
 import {Navigate} from "react-router-dom";
+import {sha256} from "js-sha256";
 
 class Register extends Component<any, any> {
     state: { attempt_made: boolean; attempt_success: boolean; name: string; password: string; email: string; }
@@ -20,30 +21,21 @@ class Register extends Component<any, any> {
         this.setState({[event.target.name]: event.target.value});
     }
 
-    handleSubmit(event: { preventDefault: () => void; }) {
+    async handleSubmit(event: any) {
         event.preventDefault();
-        const sha256 = require('js-sha256');
         const {name, password, email} = this.state;
-        fetch('/api/register', {
+        const response = await fetch('/api/register', {
             method: 'POST',
             body: JSON.stringify({name, password: sha256(password), email}),
             headers: {'Content-Type': 'application/json'}
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.error) this.setState({attempt_made: true, attempt_success: false})
-                else {
-                    this.setState({attempt_made: true, attempt_success: true})
-                }
-            })
-
+        if (!response.ok) {
+            this.setState({attempt_made: true, attempt_success: false})
+            console.log("Response from API was not OK.")
+            return
+        }
+        this.setState({attempt_made: true, attempt_success: true})
     }
-
     render() {
         return (
             <div>

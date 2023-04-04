@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import '../scss/RegLogin.scss';
 import Cookies from 'js-cookie';
 import {Navigate} from "react-router-dom";
+import {sha256} from 'js-sha256';
 
 class Login extends Component<any, any> {
     state: { attempt_made: boolean; attempt_success: boolean; password: string; email: string; }
@@ -20,30 +21,22 @@ class Login extends Component<any, any> {
         this.setState({[event.target.name]: event.target.value});
     }
 
-    handleSubmit(event: { preventDefault: () => void; }) {
+    async handleSubmit(event: any) {
         event.preventDefault();
-        const sha256 = require('js-sha256');
         const {password, email} = this.state;
-        fetch('/api/login', {
+        const response = await fetch('/api/login', {
             method: 'POST',
             body: JSON.stringify({password: sha256(password), email}),
             headers: {'Content-Type': 'application/json'}
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('An error occured trying to create the account.');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.error) this.setState({attempt_made: true, attempt_success: false})
-                else {
-                    this.setState({attempt_made: true, attempt_success: true})
-                    Cookies.set("user_token", JSON.stringify(data.user_token), {expires: 3 * 24});
-                    window.history.replaceState(null,'','/posts')
-                }
-            })
-
+        if (!response.ok) {
+            this.setState({attempt_made: true, attempt_success: false})
+            console.log("Response from API was not OK.")
+            return
+        }
+        const data = await response.json()
+        this.setState({attempt_made: true, attempt_success: true})
+        Cookies.set("user_token", JSON.stringify(data.user_token), {expires: 3 * 24});
     }
 
     render() {
