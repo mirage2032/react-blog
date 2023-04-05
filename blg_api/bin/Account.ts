@@ -13,7 +13,7 @@ export function setupAccountRoutes(appwdb: expappwdb) {
         const query = 'INSERT INTO users (username,password,email,user_uid) VALUES (?,?,?,0)';
         const query_params = [user.username, user.password, user.email];
         appwdb.mysqldb.query(query, query_params, (err, result: any) => {
-            if (err) res.json({msg: err.message}).status(409)
+            if (err) res.status(409).json({msg: err.message})
             else res.json({
                 user_uid: result.insertId
             })
