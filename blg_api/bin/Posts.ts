@@ -1,7 +1,6 @@
 import express from "express";
 import {expappwdb} from "./types/types";
 import {mdwBodyisPresent, mdwGetUserUID} from "./middleware";
-
 export function setupPostsRoute(appwdb: expappwdb) {
     console.log("Setting-up Posts Route")
     appwdb.expressapp.post('/api/postarticle', mdwBodyisPresent, mdwGetUserUID, (req: express.Request, res: express.Response) => {
