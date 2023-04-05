@@ -1,1 +1,1 @@
-export type tokendata_encrypted = { iv: string, encryptedObject: string }
+export type tokendata_encrypted = { iv: string, encryptedObject: string, authTag: string; }

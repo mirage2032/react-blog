@@ -8,7 +8,7 @@ export function setupPostsRoute(appwdb: expappwdb) {
         if (!req.user_uid) res.status(401).json({data: "Unauthorized"});
         if (!req.body.content) res.status(400).json({data: "Unauthorized"});
         else appwdb.mysqldb.query(query, [req.user_uid, req.body.content, req.body.category], (err, result: any) => {
-            if (err) res.json({msg: err.message}).status(500)
+            if (err) res.status(500).json({msg: err.message})
             else res.json({
                 post_uid: result.insertId
             })
