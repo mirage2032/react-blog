@@ -23,6 +23,7 @@ services:
       - ./blg_api:/web
     working_dir: /web
     command: sh -c "npm install --no-fund --no-audit && rm -rf dist/* && npm run build && npm run start"
+    restart: on-failure
     depends_on:
       db-container:
         condition: service_healthy
