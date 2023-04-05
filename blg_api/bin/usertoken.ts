@@ -10,7 +10,7 @@ function makeToken(time_hr: number, user_uid: string) {
         user_uid,
         expiration: Date.now() + (time_hr * 60 * 60 * 1000),
     }
-    const iv = new Buffer(crypto.randomBytes(12).toString(), 'utf8');
+    const iv = Buffer.from(crypto.randomBytes(12).toString(), 'utf8');
     const cipher = crypto.createCipheriv('aes-256-gcm', Buffer.from(process.env.USERTOK_ENC_KEY, 'utf8'), iv);
     let encryptedObject = cipher.update(JSON.stringify(user_clrtoken), 'utf8', 'base64');
     encryptedObject += cipher.final('base64');
