@@ -11,6 +11,7 @@ form {
 }
 
 .articleinput textarea {
+  outline: none;
   resize: none;
   border: none;
   width: 100%;
@@ -18,20 +19,4 @@ form {
   height: 4em;
   background-color: colors.$main1;
   color: colors.$main2;
-
-}
-
-.articlecategory select {
-  font-size: 2.5em;
-  font-family: 'Sono', sans-serif;
-  background-color: colors.$main1;
-  color: colors.$main2;
-}
-
-.postarticlesubmit {
-  font-size: 2.5em;
-  font-family: 'Sono', sans-serif;
-  background-color: colors.$main1;
-  color: colors.$main2;
-  border: solid 2px colors.$main2;
 }

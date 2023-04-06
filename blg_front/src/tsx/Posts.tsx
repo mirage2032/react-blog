@@ -61,10 +61,10 @@ class Posts extends Component<CategoryChoice, PostsState> {
                             <p>Choose Category</p>
                             <div>
                                 <Link to='/posts/buy'>
-                                    <button>Buy</button>
+                                    <button className={"button-tp1"}>Buy</button>
                                 </Link>
                                 <Link to='/posts/sell'>
-                                    <button>Sell</button>
+                                    <button className={"button-tp1"}>Sell</button>
                                 </Link>
                             </div>
                         </div>

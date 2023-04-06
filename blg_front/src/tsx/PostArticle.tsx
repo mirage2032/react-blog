@@ -41,7 +41,7 @@ class PostArticle extends Component<PostArticleProps, any> {
                         <span>Contenty:</span>
                         <textarea name="content" onChange={this.handleChange.bind(this)} required/>
                     </label>
-                    <button className={"postarticlesubmit"} type="submit">Post</button>
+                    <button className={"button-tp1"} type="submit">Post</button>
                 </form>
             </div>
         )
