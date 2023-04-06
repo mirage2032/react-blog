@@ -13,15 +13,14 @@ const databasecfg: ConnectionOptions = {
     database: "db",
 }
 
-const connection = mysql.createConnection(databasecfg)
-connection.connect()
+const dbpool = mysql.createPool(databasecfg).promise()
 const app = express()
 app.use(express.json());
 app.use(cookieParser());
 app.listen(3010, () => {
     console.log(`API STARTED ON PORT 3010`)
 })
-const appwdb: expappwdb = {expressapp: app, mysqldb: connection}
+const appwdb: expappwdb = {app, dbpool}
 
 setupAccountRoutes(appwdb)
 setupPostsRoute(appwdb)
