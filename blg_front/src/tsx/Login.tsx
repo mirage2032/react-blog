@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Suspense} from 'react';
 import '../scss/RegLogin.scss';
 import Cookies from 'js-cookie';
 import {Navigate} from "react-router-dom";
@@ -40,6 +40,22 @@ class Login extends Component<any, any> {
         Cookies.set("user_token", JSON.stringify(data.user_token), {expires: 3 * 24});
     }
 
+    async sbmit(event:any){
+        event.preventDefault();
+        const {password, email} = this.state;
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            body: JSON.stringify({password: sha256(password), email}),
+            headers: {'Content-Type': 'application/json'}
+        })
+        if (!response.ok) {
+            this.setState({attempt_made: true, attempt_success: false})
+            throw new Error("Response from API was not OK.")
+        }
+        const data: { user_token: tokendata_encrypted } = await response.json()
+        this.setState({attempt_made: true, attempt_success: true})
+        Cookies.set("user_token", JSON.stringify(data.user_token), {expires: 3 * 24});    }
+
     render() {
         return (
             <div>
@@ -56,6 +72,9 @@ class Login extends Component<any, any> {
                             <button className={"buttonSubmit"} type="submit"
                                     style={{visibility: this.state.attempt_success ? 'hidden' : 'visible'}}>Log In
                             </button>
+                            <Suspense fallback={<p className={"regnotif regnotifneg"}>Loading</p>}>
+                                <Navigate to='/posts'></Navigate>
+                            </Suspense>
                             {
                                 this.state.attempt_made ? (
                                     this.state.attempt_success ?

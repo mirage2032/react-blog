@@ -5,6 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Register from "./tsx/Register";
 import Login from "./tsx/Login";
+import Threejscanv from './tsx/threejs'
 import PostsCategory from "./tsx/Posts";
 
 const root = ReactDOM.createRoot(
@@ -18,6 +19,7 @@ root.render(
                 <Route path="/" element={<Navigate to='/posts'></Navigate>}/>
                 <Route path="/register" element={<Register/>}/>
                 <Route path="/login" element={<Login/>}/>
+                <Route path="/threejs" element={<Threejscanv/>}/>
                 <Route path="/posts">
                     <Route index element={<Navigate to="/posts/buy" replace></Navigate>}></Route>
                     <Route path=":category" element={<PostsCategory/>}></Route>
