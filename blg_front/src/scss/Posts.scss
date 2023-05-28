@@ -7,7 +7,7 @@
 }
 
 .article {
-    border-radius: 2em;
+    border-radius: 3em;
     background-color: colors.$main1;
     margin: 1em 0;
     padding: 1em;
@@ -33,6 +33,7 @@
     font-size: 1.5em;
     color: colors.$main1;
 }
+
 .categcontainer div {
     display: flex;
     justify-content: space-between;
@@ -42,4 +43,8 @@
     padding: 2em;
     border-radius: 2em;
     background-color: colors.$main3;
+}
+
+.categcontainer button {
+    border-radius: 20%;
 }
