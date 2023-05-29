@@ -1,3 +1,17 @@
 $main1: #887b88;
-$main2: rgb(25, 1, 26);
+$main2: #19011A;
 $main3: #413644;
+
+//TODO:: MODIFY CODE TO USE THE THEMES BELOW INSTEAD
+$themes: (
+        light:(
+                color1: #887b88,
+                color2: #19011A,
+                color3: #413644,
+        ),
+        dark:(
+                color1: #887b88,
+                color2: #19011A,
+                color3: #413644,
+        )
+)

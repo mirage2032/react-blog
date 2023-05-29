@@ -4,12 +4,50 @@ import "../scss/Posts.scss"
 import "./PostArticle"
 import PostArticle from "./PostArticle";
 import {Link, useParams} from "react-router-dom";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faTrashAlt} from '@fortawesome/free-regular-svg-icons';
 
 type CategoryChoice = {
     category: string;
 }
 
-type PostsState = { posts: { created_at: string; content: string; username: string }[] }
+type PostData = { created_at: string; content: string; username: string; post_uid: string }
+type PostProp = { data: PostData, updateCallback: { (): void; } }
+type PostState = { editing: boolean }
+type PostsState = { posts: PostData[] }
+
+class Post extends Component<PostProp, PostState> {
+    constructor(props: any) {
+        super(props);
+        this.state = {editing: false};
+    }
+
+    deletePost() {
+        fetch('/api/deletepost', {
+            method: 'POST',
+            body: JSON.stringify({post_uid: this.props.data.post_uid}),
+            headers: {'Content-Type': 'application/json'}
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                this.props.updateCallback()
+            })
+    }
+
+    render() {
+        return (
+            <article className={'article'}>
+                <span className={'article_username'}>User: {this.props.data.username}</span>
+                <p>{this.props.data.content}</p>
+                <p>{parseDBTime(this.props.data.created_at)}</p>
+                <button className={'article_remove_btn'} onClick={this.deletePost.bind(this)}><FontAwesomeIcon
+                    icon={faTrashAlt}/></button>
+            </article>
+        );
+    }
+}
 
 class Posts extends Component<CategoryChoice, PostsState> {
 
@@ -43,9 +81,7 @@ class Posts extends Component<CategoryChoice, PostsState> {
                 return response.json();
             })
             .then(data => {
-                console.log(data)
-                if (data.error) return;
-                else this.setState({posts: data})
+                this.setState({posts: data})
             })
     }
 
@@ -70,11 +106,7 @@ class Posts extends Component<CategoryChoice, PostsState> {
                         </div>
                         {(
                             this.state.posts.map((item, index) => (
-                                <article className={'article'} key={index}>
-                                    <span className={'article_username'}>User: {item.username}</span>
-                                    <p className={'article_content'}>{item.content}</p>
-                                    <p className={'article_created_at'}>{parseDBTime(item.created_at)}</p>
-                                </article>
+                                <Post data={item} updateCallback={this.fetchCategory.bind(this)}></Post>
                             ))
                         )}
                     </main>

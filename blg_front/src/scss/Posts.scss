@@ -1,50 +1,58 @@
 @use 'colors';
 
 .articles {
-    display: grid;
-    width: 70vw;
-    margin: auto;
+  display: grid;
+  width: 70vw;
+  margin: auto;
 }
 
 .article {
-    border-radius: 3em;
-    background-color: colors.$main1;
-    margin: 1em 0;
-    padding: 1em;
+  border-radius: 3em;
+  background-color: colors.$main1;
+  margin: 1em 0;
+  padding: 1em;
 }
 
 .article::before {
-    position: absolute;
-    box-shadow: 0 0 8px 8px colors.$main2 inset;
+  position: absolute;
+  box-shadow: 0 0 8px 8px colors.$main2 inset;
 }
 
 .article_username {
-    float: right;
+  float: right;
+}
+
+.article_remove_btn {
+  font-size: 1.5em;
+  color: white;
+  padding: 5px;
+  border: none;
+  background-color: colors.$main2;
 }
 
 .categcontainer {
-    width: 100%;
-    margin: auto;
+  width: 100%;
+  margin: auto;
 }
 
 .categcontainer p {
-    text-align: center;
-    display: block;
-    font-size: 1.5em;
-    color: colors.$main1;
+  text-align: center;
+  display: block;
+  font-size: 1.5em;
+  color: colors.$main1;
 }
 
 .categcontainer div {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .articlecontainer {
-    padding: 2em;
-    border-radius: 2em;
-    background-color: colors.$main3;
+  padding: 2em;
+  border-radius: 2em;
+  background-color: colors.$main3;
 }
 
 .categcontainer button {
-    border-radius: 20%;
+  border-radius: 20%;
 }

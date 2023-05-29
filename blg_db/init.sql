@@ -1,9 +1,9 @@
 CREATE TABLE users
 (
-    user_uid   CHAR(37)     NOT NULL PRIMARY KEY,
-    username   VARCHAR(50)  NOT NULL UNIQUE,
-    password   CHAR(64)     NOT NULL,
-    email      VARCHAR(255) NOT NULL UNIQUE,
+    user_uid   CHAR(37)                            NOT NULL PRIMARY KEY,
+    username   VARCHAR(50)                         NOT NULL UNIQUE,
+    password   CHAR(64)                            NOT NULL,
+    email      VARCHAR(255)                        NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
@@ -14,10 +14,10 @@ CREATE TRIGGER create_user_uid
 
 CREATE TABLE posts
 (
-    post_uid   CHAR(37)            NOT NULL PRIMARY KEY,
-    user_uid   CHAR(37)            NOT NULL,
-    content    TEXT                NOT NULL,
-    category   ENUM ('buy','sell') NOT NULL,
+    post_uid   CHAR(37)                            NOT NULL PRIMARY KEY,
+    user_uid   CHAR(37)                            NOT NULL,
+    content    TEXT                                NOT NULL,
+    category   ENUM ('buy','sell')                 NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     FOREIGN KEY (user_uid)
         REFERENCES users (user_uid)
@@ -46,4 +46,14 @@ CREATE TABLE post_votes
         ON DELETE CASCADE
         ON UPDATE CASCADE,
     CONSTRAINT votelimit UNIQUE (user_uid, post_uid)
-)
+);
+
+CREATE VIEW user_post_counts AS
+SELECT users.user_uid,
+       users.username,
+       COUNT(CASE WHEN posts.category = 'sell' THEN posts.post_uid END) AS sell_count,
+       COUNT(CASE WHEN posts.category = 'buy' THEN posts.post_uid END)  AS buy_count,
+       COUNT(posts.post_uid)                                            AS total_count
+FROM users
+         LEFT JOIN posts ON users.user_uid = posts.user_uid
+GROUP BY users.user_uid, users.username;

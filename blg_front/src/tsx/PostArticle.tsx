@@ -21,7 +21,7 @@ class PostArticle extends Component<PostArticleProps, any> {
         event.preventDefault();
         const {content} = this.state;
         const {category} = this.props;
-        const response = await fetch('/api/postarticle', {
+        const response = await fetch('/api/post', {
             method: 'POST',
             body: JSON.stringify({content, category}),
             headers: {'Content-Type': 'application/json'}
