@@ -20,11 +20,11 @@ export function setupPostsRoute(appwdb: expappwdb) {
 
     // edit existing post
     appwdb.expressapp.post('/api/editpost', mdwBodyisPresent, mdwGetUserUID, (req: express.Request, res: express.Response) => {
-        const query = 'UPDATE posts SET content = ? WHERE post_uid = ?';
+        const query = 'UPDATE posts SET content = ? WHERE post_uid = ? AND user_uid = ?';
         if (!req.user_uid) res.status(401).json({data: "Unauthorized"});
         if (!req.body.content) res.status(400).json({data: "Unauthorized"});
         if (!req.body.post_uid) res.status(400).json({data: "Unauthorized"});
-        else appwdb.mysqldb.query(query, [req.body.content, req.body.post_uid], (err) => {
+        else appwdb.mysqldb.query(query, [req.body.content, req.body.post_uid, req.user_uid], (err) => {
             if (err) res.status(500).json({msg: err.message})
             else res.json({success: true})
         })

@@ -6,6 +6,7 @@ import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Register from "./tsx/Register";
 import Login from "./tsx/Login";
 import PostsCategory from "./tsx/Posts";
+import {SessionProvider} from "./sessionContext";
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -13,17 +14,19 @@ const root = ReactDOM.createRoot(
 
 root.render(
     <React.StrictMode>
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<Navigate to='/posts'></Navigate>}/>
-                <Route path="/register" element={<Register/>}/>
-                <Route path="/login" element={<Login/>}/>
-                <Route path="/posts">
-                    <Route index element={<Navigate to="/posts/buy" replace></Navigate>}></Route>
-                    <Route path=":category" element={<PostsCategory/>}></Route>
-                </Route>
-            </Routes>
-        </BrowserRouter>
+        <SessionProvider>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<Navigate to='/posts'></Navigate>}/>
+                    <Route path="/register" element={<Register/>}/>
+                    <Route path="/login" element={<Login/>}/>
+                    <Route path="/posts">
+                        <Route index element={<Navigate to="/posts/buy" replace></Navigate>}></Route>
+                        <Route path=":category" element={<PostsCategory/>}></Route>
+                    </Route>
+                </Routes>
+            </BrowserRouter>
+        </SessionProvider>
     </React.StrictMode>
 );
 

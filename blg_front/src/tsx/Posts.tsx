@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useContext, useState} from 'react';
 import NavBar from "./NavBar";
 import "../scss/Posts.scss"
 import "./PostArticle"
@@ -6,6 +6,7 @@ import PostArticle from "./PostArticle";
 import {Link, useParams} from "react-router-dom";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faTrashAlt, faPenToSquare} from '@fortawesome/free-regular-svg-icons';
+import {SessionContext} from '../sessionContext';
 
 type CategoryChoice = {
     category: string;
@@ -13,72 +14,75 @@ type CategoryChoice = {
 
 type PostData = { created_at: string; content: string; username: string; post_uid: string }
 type PostProp = { data: PostData, updateCallback: { (): void; } }
-type PostState = { editing: boolean, current_content: string }
 type PostsState = { posts: PostData[] }
 
-class Post extends Component<PostProp, PostState> {
-    constructor(props: any) {
-        super(props);
-        this.state = {editing: false, current_content: this.props.data.content};
-    }
+const Post = (props: PostProp) => {
+    const [editing, setEditing] = useState(false);
+    const [currentContent, setCurrentContent] = useState(props.data.content);
+    const {username} = useContext(SessionContext);
 
-    deletePost() {
+    const deletePost = () => {
         fetch('/api/deletepost', {
             method: 'POST',
-            body: JSON.stringify({post_uid: this.props.data.post_uid}),
-            headers: {'Content-Type': 'application/json'}
+            body: JSON.stringify({post_uid: props.data.post_uid}),
+            headers: {'Content-Type': 'application/json'},
         })
-            .then(response => {
+            .then((response) => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                this.props.updateCallback()
-            })
-    }
+                props.updateCallback();
+            });
+    };
 
-    handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-        this.setState({current_content: event.target.value});
-    }
+    const handleChange = (event: any) => {
+        setCurrentContent(event.target.value);
+    };
 
-    switchEditingState() {
-        if (this.state.editing && (this.state.current_content !== this.props.data.content)) {
+    const switchEditingState = () => {
+        if (editing && currentContent !== props.data.content) {
             fetch('/api/editpost', {
                 method: 'POST',
-                body: JSON.stringify({post_uid: this.props.data.post_uid, content: this.state.current_content}),
-                headers: {'Content-Type': 'application/json'}
+                body: JSON.stringify({post_uid: props.data.post_uid, content: currentContent}),
+                headers: {'Content-Type': 'application/json'},
             })
-                .then(response => {
+                .then((response) => {
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }
-                    this.props.updateCallback()
-                })
+                    props.updateCallback();
+                });
         }
-        this.setState({editing: !this.state.editing});
-    }
+        setEditing(!editing);
+    };
 
-    render() {
-        return (
-            <article className={'article'}>
-                <span className={'article_username'}>User: {this.props.data.username}</span>
-                {
-                    this.state.editing ?
-                        <input className={'article_content_editable'}
-                                  defaultValue={this.props.data.content}
-                                  onChange={this.handleChange.bind(this)}></input>
-                        :
-                        <p className={'article_content'}>{this.props.data.content}</p>
-                }
-                <p>{parseDBTime(this.props.data.created_at)}</p>
-                <button className={'article_btn'} onClick={this.deletePost.bind(this)}><FontAwesomeIcon
-                    icon={faTrashAlt}/></button>
-                <button className={`article_btn ${this.state.editing ? 'article_btn_green' : ''}`}
-                        onClick={this.switchEditingState.bind(this)}><FontAwesomeIcon
-                    icon={faPenToSquare}/></button>
-            </article>
-        );
-    }
-}
+    return (
+        <article className={'article'}>
+            <span className={'article_username'}>User: {props.data.username}</span>
+            {editing ? (
+                <input
+                    className={'article_content_editable'}
+                    defaultValue={props.data.content}
+                    onChange={handleChange}
+                />
+            ) : (
+                <p className={'article_content'}>{props.data.content}</p>
+            )}
+            <p>{parseDBTime(props.data.created_at)}</p>
+            {props.data.username===username?
+                <>
+                <button className={'article_btn'} onClick={deletePost}>
+                    <FontAwesomeIcon icon={faTrashAlt}/>
+                </button>
+                <button
+                    className={`article_btn ${editing ? 'article_btn_green' : ''}`}
+                    onClick={switchEditingState}>
+                    <FontAwesomeIcon icon={faPenToSquare}/>
+                </button>
+            </>:<></>}
+        </article>
+    );
+};
 
 class Posts extends Component<CategoryChoice, PostsState> {
 

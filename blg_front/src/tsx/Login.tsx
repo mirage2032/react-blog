@@ -6,6 +6,7 @@ import {sha256} from 'js-sha256';
 import {tokendata_encrypted} from "./types/common";
 
 class Login extends Component<any, any> {
+
     state: { attempt_made: boolean; attempt_success: boolean; password: string; email: string; }
 
     constructor(props: any) {
