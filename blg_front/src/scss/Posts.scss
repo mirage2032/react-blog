@@ -19,17 +19,44 @@
 }
 
 .article_username {
-  float: right;
 }
 
-.article_remove_btn {
+.article_content_editable {
+  background-color: white;
+}
+
+.article_btn {
   font-size: 1.5em;
   color: white;
   padding: 5px;
+  margin: 5px;
   border: none;
   background-color: colors.$main2;
 }
 
+.article_btn_green {
+  background-color: #0a730a;
+}
+[class^="article_content"] {
+  box-sizing: border-box;
+  border: none;
+  border-radius: 10px;
+  outline: none;
+  background-color: transparent;
+  resize: none;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  padding: 1em 0;
+  margin: 0;
+  overflow: hidden;
+  width: 100%;
+  height: auto;
+}
+
+.article_content_editable {
+  background-color: white;
+}
 .categcontainer {
   width: 100%;
   margin: auto;
