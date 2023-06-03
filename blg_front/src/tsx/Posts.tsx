@@ -29,7 +29,6 @@ const PostArticle = (props: PostArticleProps) => {
             console.log("Response from API was not OK.");
             return;
         }
-
         props.updatefunc();
     };
 
@@ -45,6 +44,8 @@ const PostArticle = (props: PostArticleProps) => {
         </div>
     );
 }
+
+//TODO: SEARCH
 const Post = (props: PostProp) => {
     const [editing, setEditing] = useState(false);
     const [currentContent, setCurrentContent] = useState(props.data.content);
@@ -112,33 +113,35 @@ const Post = (props: PostProp) => {
 const Posts = () => {
     const {category} = useParams<string>();
     const [posts, setPosts] = useState<PostData[]>([]);
+    const [searchterm, setSearchTerm] = useState<string>("");
 
-    const fetchCategory = useCallback(() => {
-        fetch('/api/posts', {
+    const fetchPosts = useCallback(async () => {
+        const response = await fetch('/api/posts', {
             method: 'POST',
-            body: JSON.stringify({category: category}),
+            body: JSON.stringify({category, searchterm}),
             headers: {'Content-Type': 'application/json'}
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                setPosts(data);
-            })
-    }, [category]);
+        if (!response.ok) {
+            throw new Error('Network response was not ok')
+        }
+        const data = await response.json()
+        setPosts(data)
+    }, [category, searchterm]);
+
+    const searchPosts = async (st: string) => {
+        setSearchTerm(st)
+        await fetchPosts
+    }
 
     useEffect(() => {
-        fetchCategory();
-    }, [category, fetchCategory]);
+        fetchPosts().then()
+    }, [fetchPosts]);
 
     return (
         <div>
             <NavBar/>
             <div className={'articles'}>
-                <PostArticle updatefunc={fetchCategory} category={category!}/>
+                <PostArticle updatefunc={fetchPosts} category={category!}/>
                 <main className={"articlecontainer"}>
                     <div className={"categcontainer"}>
                         <p>Choose Category</p>
@@ -152,7 +155,7 @@ const Posts = () => {
                         </div>
                     </div>
                     {posts.map((item) => (
-                        <Post key={item.post_uid} data={item} updateCallback={fetchCategory}/>
+                        <Post key={item.post_uid} data={item} updateCallback={fetchPosts}/>
                     ))}
                 </main>
             </div>
