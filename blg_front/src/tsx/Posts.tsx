@@ -7,11 +7,11 @@ import {faTrashAlt, faPenToSquare} from '@fortawesome/free-regular-svg-icons';
 import {SessionContext} from '../sessionContext';
 
 
-type PostData = { created_at: string; content: string; username: string; post_uid: string }
-type PostProp = { data: PostData, updateCallback: { (): void; } }
 type PostArticleProps = { updatefunc: Function; category: string };
+type PostData = { created_at: string; content: string; username: string; post_uid: string }
+type PostProp = { data: PostData, updateCallback: Function }
 
-const PostArticle: React.FC<PostArticleProps> = ({updatefunc, category}) => {
+const PostArticle = (props: PostArticleProps) => {
     const [content, setContent] = useState("");
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setContent(event.target.value);
@@ -21,7 +21,7 @@ const PostArticle: React.FC<PostArticleProps> = ({updatefunc, category}) => {
         event.preventDefault();
         const response = await fetch('/api/post', {
             method: 'POST',
-            body: JSON.stringify({content, category}),
+            body: JSON.stringify({content, category: props.category}),
             headers: {'Content-Type': 'application/json'}
         });
 
@@ -30,7 +30,7 @@ const PostArticle: React.FC<PostArticleProps> = ({updatefunc, category}) => {
             return;
         }
 
-        updatefunc();
+        props.updatefunc();
     };
 
     return (
@@ -50,37 +50,33 @@ const Post = (props: PostProp) => {
     const [currentContent, setCurrentContent] = useState(props.data.content);
     const {username} = useContext(SessionContext);
 
-    const deletePost = () => {
-        fetch('/api/deletepost', {
+    const deletePost = async () => {
+        const response = await fetch('/api/deletepost', {
             method: 'POST',
             body: JSON.stringify({post_uid: props.data.post_uid}),
             headers: {'Content-Type': 'application/json'},
         })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                props.updateCallback();
-            });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        props.updateCallback()
     };
 
-    const handleChange = (event: any) => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCurrentContent(event.target.value);
     };
 
-    const switchEditingState = () => {
+    const switchEditingState = async () => {
         if (editing && currentContent !== props.data.content) {
-            fetch('/api/editpost', {
+            const response = await fetch('/api/editpost', {
                 method: 'POST',
                 body: JSON.stringify({post_uid: props.data.post_uid, content: currentContent}),
                 headers: {'Content-Type': 'application/json'},
             })
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    props.updateCallback();
-                });
+            if (!response.ok) {
+                throw new Error('Network response was not ok')
+            }
+            props.updateCallback()
         }
         setEditing(!editing);
     };
@@ -114,7 +110,7 @@ const Post = (props: PostProp) => {
 };
 
 const Posts = () => {
-    const {category} = useParams();
+    const {category} = useParams<string>();
     const [posts, setPosts] = useState<PostData[]>([]);
 
     const fetchCategory = useCallback(() => {
