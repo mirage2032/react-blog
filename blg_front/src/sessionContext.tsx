@@ -1,4 +1,3 @@
-// SessionContext.tsx
 import React, {createContext, useState, ReactNode} from 'react';
 
 interface SessionContextProps {

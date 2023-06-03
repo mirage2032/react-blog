@@ -1,21 +1,50 @@
-import React, {Component, useContext, useState} from 'react';
+import React, {useContext, useEffect, useState, useCallback} from 'react';
 import NavBar from "./NavBar";
 import "../scss/Posts.scss"
-import "./PostArticle"
-import PostArticle from "./PostArticle";
 import {Link, useParams} from "react-router-dom";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faTrashAlt, faPenToSquare} from '@fortawesome/free-regular-svg-icons';
 import {SessionContext} from '../sessionContext';
 
-type CategoryChoice = {
-    category: string;
-}
 
 type PostData = { created_at: string; content: string; username: string; post_uid: string }
 type PostProp = { data: PostData, updateCallback: { (): void; } }
-type PostsState = { posts: PostData[] }
+type PostArticleProps = { updatefunc: Function; category: string };
 
+const PostArticle: React.FC<PostArticleProps> = ({updatefunc, category}) => {
+    const [content, setContent] = useState("");
+    const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setContent(event.target.value);
+    };
+
+    const handleSubmit = async (event: React.FormEvent) => {
+        event.preventDefault();
+        const response = await fetch('/api/post', {
+            method: 'POST',
+            body: JSON.stringify({content, category}),
+            headers: {'Content-Type': 'application/json'}
+        });
+
+        if (!response.ok) {
+            console.log("Response from API was not OK.");
+            return;
+        }
+
+        updatefunc();
+    };
+
+    return (
+        <div>
+            <form className={"postform"} onSubmit={handleSubmit}>
+                <label className={"articlelabel articleinput"}>
+                    <span>Content:</span>
+                    <textarea name="content" onChange={handleChange} required/>
+                </label>
+                <button className={"button-tp1"} type="submit">Post</button>
+            </form>
+        </div>
+    );
+}
 const Post = (props: PostProp) => {
     const [editing, setEditing] = useState(false);
     const [currentContent, setCurrentContent] = useState(props.data.content);
@@ -69,44 +98,29 @@ const Post = (props: PostProp) => {
                 <p className={'article_content'}>{props.data.content}</p>
             )}
             <p>{parseDBTime(props.data.created_at)}</p>
-            {props.data.username===username?
+            {props.data.username === username ?
                 <>
-                <button className={'article_btn'} onClick={deletePost}>
-                    <FontAwesomeIcon icon={faTrashAlt}/>
-                </button>
-                <button
-                    className={`article_btn ${editing ? 'article_btn_green' : ''}`}
-                    onClick={switchEditingState}>
-                    <FontAwesomeIcon icon={faPenToSquare}/>
-                </button>
-            </>:<></>}
+                    <button className={'article_btn'} onClick={deletePost}>
+                        <FontAwesomeIcon icon={faTrashAlt}/>
+                    </button>
+                    <button
+                        className={`article_btn ${editing ? 'article_btn_green' : ''}`}
+                        onClick={switchEditingState}>
+                        <FontAwesomeIcon icon={faPenToSquare}/>
+                    </button>
+                </> : <></>}
         </article>
     );
 };
 
-class Posts extends Component<CategoryChoice, PostsState> {
+const Posts = () => {
+    const {category} = useParams();
+    const [posts, setPosts] = useState<PostData[]>([]);
 
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            posts: []
-        };
-    }
-
-    componentDidMount() {
-        this.fetchCategory()
-    }
-
-    componentDidUpdate(prevProps: Readonly<CategoryChoice>, prevState: Readonly<PostsState>, snapshot?: any) {
-        if (prevProps.category !== this.props.category) {
-            this.fetchCategory()
-        }
-    }
-
-    fetchCategory() {
+    const fetchCategory = useCallback(() => {
         fetch('/api/posts', {
             method: 'POST',
-            body: JSON.stringify({category: this.props.category}),
+            body: JSON.stringify({category: category}),
             headers: {'Content-Type': 'application/json'}
         })
             .then(response => {
@@ -116,42 +130,41 @@ class Posts extends Component<CategoryChoice, PostsState> {
                 return response.json();
             })
             .then(data => {
-                this.setState({posts: data})
+                setPosts(data);
             })
-    }
+    }, [category]);
 
-    render() {
-        return (
-            <div>
-                <NavBar></NavBar>
-                <div className={'articles'}>
-                    <PostArticle updatefunc={this.fetchCategory.bind(this)}
-                                 category={this.props.category}></PostArticle>
-                    <main className={"articlecontainer"}>
-                        <div className={"categcontainer"}>
-                            <p>Choose Category</p>
-                            <div>
-                                <Link to='/posts/buy'>
-                                    <button className={"button-tp1"}>Buy</button>
-                                </Link>
-                                <Link to='/posts/sell'>
-                                    <button className={"button-tp1"}>Sell</button>
-                                </Link>
-                            </div>
+    useEffect(() => {
+        fetchCategory();
+    }, [category, fetchCategory]);
+
+    return (
+        <div>
+            <NavBar/>
+            <div className={'articles'}>
+                <PostArticle updatefunc={fetchCategory} category={category!}/>
+                <main className={"articlecontainer"}>
+                    <div className={"categcontainer"}>
+                        <p>Choose Category</p>
+                        <div>
+                            <Link to='/posts/buy'>
+                                <button className={"button-tp1"}>Buy</button>
+                            </Link>
+                            <Link to='/posts/sell'>
+                                <button className={"button-tp1"}>Sell</button>
+                            </Link>
                         </div>
-                        {(
-                            this.state.posts.map((item) => (
-                                <Post key={item.post_uid} data={item}
-                                      updateCallback={this.fetchCategory.bind(this)}></Post>
-                            ))
-                        )}
-                    </main>
-                </div>
+                    </div>
+                    {posts.map((item) => (
+                        <Post key={item.post_uid} data={item} updateCallback={fetchCategory}/>
+                    ))}
+                </main>
             </div>
-        )
-    }
-
+        </div>
+    );
 }
+
+export default Posts;
 
 function parseDBTime(dbtime: string) {
     const date = new Date(dbtime);
@@ -166,12 +179,3 @@ function parseDBTime(dbtime: string) {
     };
     return date.toLocaleString('en-US', options);
 }
-
-function PostsCategory() {
-    const {category} = useParams();
-    return (
-        <Posts category={category!}></Posts>
-    )
-}
-
-export default PostsCategory;

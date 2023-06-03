@@ -5,7 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Register from "./tsx/Register";
 import Login from "./tsx/Login";
-import PostsCategory from "./tsx/Posts";
+import Posts from "./tsx/Posts";
 import {SessionProvider} from "./sessionContext";
 
 const root = ReactDOM.createRoot(
@@ -22,7 +22,7 @@ root.render(
                     <Route path="/login" element={<Login/>}/>
                     <Route path="/posts">
                         <Route index element={<Navigate to="/posts/buy" replace></Navigate>}></Route>
-                        <Route path=":category" element={<PostsCategory/>}></Route>
+                        <Route path=":category" element={<Posts/>}></Route>
                     </Route>
                 </Routes>
             </BrowserRouter>

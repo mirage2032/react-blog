@@ -6,7 +6,6 @@ import {faUser} from '@fortawesome/free-regular-svg-icons';
 import {Link} from 'react-router-dom';
 import {SessionContext} from '../sessionContext';
 
-
 const navbarTitle = (
     <h1>The Deal</h1>
 );
