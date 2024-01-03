@@ -1,3 +1,59 @@
+CREATE TABLE StudentGroups
+(
+    id       INT NOT NULL PRIMARY KEY,
+    faculty  VARCHAR(255),
+    year     INT,
+    subgroup INT
+);
+
+CREATE TABLE Accounts
+(
+    id       INT NOT NULL PRIMARY KEY,
+    username VARCHAR(255),
+    password VARCHAR(255),
+    role     ENUM ('admin', 'teacher', 'student')
+);
+
+CREATE TABLE Students
+(
+    id         INT NOT NULL PRIMARY KEY,
+    name       VARCHAR(255),
+    surname    VARCHAR(255),
+    group_id   INT,
+    account_id INT,
+    FOREIGN KEY (group_id) REFERENCES StudentGroups (id),
+    FOREIGN KEY (account_id) REFERENCES Accounts (id)
+);
+
+CREATE TABLE Teachers
+(
+    id         INT NOT NULL PRIMARY KEY,
+    name       VARCHAR(255),
+    surname    VARCHAR(255),
+    account_id INT,
+    FOREIGN KEY (account_id) REFERENCES Accounts (id)
+);
+
+CREATE TABLE Subjects
+(
+    id         INT NOT NULL PRIMARY KEY,
+    name       VARCHAR(255),
+    id_group   INT,
+    id_teacher INT,
+    FOREIGN KEY (id_group) REFERENCES StudentGroups (id),
+    FOREIGN KEY (id_teacher) REFERENCES Teachers (id)
+);
+
+CREATE TABLE Subject_timetable
+(
+    id         INT NOT NULL PRIMARY KEY,
+    id_subject INT,
+    start      TIMESTAMP,
+    end        TIMESTAMP,
+    FOREIGN KEY (id_subject) REFERENCES Subjects (id)
+);
+
+
 CREATE TABLE users
 (
     user_uid   CHAR(37)                            NOT NULL PRIMARY KEY,
@@ -47,13 +103,3 @@ CREATE TABLE post_votes
         ON UPDATE CASCADE,
     CONSTRAINT votelimit UNIQUE (user_uid, post_uid)
 );
-
-CREATE VIEW user_post_counts AS
-SELECT users.user_uid,
-       users.username,
-       COUNT(CASE WHEN posts.category = 'sell' THEN posts.post_uid END) AS sell_count,
-       COUNT(CASE WHEN posts.category = 'buy' THEN posts.post_uid END)  AS buy_count,
-       COUNT(posts.post_uid)                                            AS total_count
-FROM users
-         LEFT JOIN posts ON users.user_uid = posts.user_uid
-GROUP BY users.user_uid, users.username;
